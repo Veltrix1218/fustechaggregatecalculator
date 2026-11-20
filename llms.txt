@@ -1,0 +1,46 @@
+# FUSTECH Aggregate Calculator
+
+> FUSTECH Aggregate Calculator is a free educational calculator developed by Marvo Tech Lab.
+
+## Website
+
+https://fustechaggregatecalculator.vercel.app/
+
+## About
+
+The FUSTECH Aggregate Calculator helps prospective students estimate their admission screening aggregate using their JAMB score and five relevant O'Level subject grades.
+
+## Calculation Method
+
+### JAMB Contribution
+
+JAMB score × 70 ÷ 400
+
+Maximum contribution: 70 points.
+
+### O'Level Contribution
+
+A1 = 6 points
+B2 = 5 points
+B3 = 4 points
+C4 = 3 points
+C5 = 2 points
+C6 = 1 point
+
+The five subject grade points are added together.
+
+Maximum contribution: 30 points.
+
+### Final Aggregate
+
+JAMB contribution + O'Level contribution.
+
+Maximum aggregate: 100 points.
+
+## Important Notice
+
+The calculator provides an estimate based on the supplied screening criteria. It does not represent an official admission decision or guarantee admission.
+
+## Developer
+
+Marvo Tech Lab

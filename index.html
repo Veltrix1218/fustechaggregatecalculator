@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <!-- No maximum-scale here: blocking pinch-zoom hurts accessibility. Phones won't auto-zoom because every input is 16px+ (see style.css). -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>FUSTECH Aggregate Calculator | Marvo Tech Lab</title>
+    <meta name="description" content="Calculate your FUSTECH Epe admission screening score using your JAMB score (70%) and five O'Level grades (30%).">
+    <meta name="keywords" content="FUSTECH aggregate calculator, FUSTECH Epe, JAMB calculator, O'Level aggregate, admission screening calculator, Marvo Tech Lab">
+    <meta name="author" content="Marvo Tech Lab">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#075be8">
+    <meta name="color-scheme" content="light dark">
+    <link rel="canonical" href="https://fustechaggregatecalculator.vercel.app/">
+    <link rel="icon" type="image/webp" href="assets/file_00000000282081f4893661b5b9f4b9ce.webp">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FUSTECH Aggregate Calculator">
+    <meta property="og:description" content="Calculate your FUSTECH admission aggregate using JAMB and O'Level grades.">
+    <meta property="og:image" content="https://fustechaggregatecalculator.vercel.app/assets/file_00000000282081f4893661b5b9f4b9ce.webp">
+    <meta property="og:url" content="https://fustechaggregatecalculator.vercel.app/">
+    <meta property="og:site_name" content="FUSTECH Aggregate Calculator">
+    <meta property="og:locale" content="en_NG">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FUSTECH Aggregate Calculator">
+    <meta name="twitter:description" content="Calculate your FUSTECH admission aggregate using JAMB and O'Level grades.">
+    <meta name="twitter:image" content="https://fustechaggregatecalculator.vercel.app/assets/file_00000000282081f4893661b5b9f4b9ce.webp">
+
+    <!-- Runs before first paint so the saved theme never flashes the wrong colour -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('fustech-theme');
+                var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { /* storage blocked: stay on light */ }
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "FUSTECH Aggregate Calculator",
+        "url": "https://fustechaggregatecalculator.vercel.app/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "description": "Calculate your FUSTECH admission aggregate using your JAMB score and five relevant O'Level grades.",
+        "author": { "@type": "Organization", "name": "Marvo Tech Lab", "url": "https://marvotechlab.vercel.app/" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "NGN" }
+    }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="is-loading">
+    <a class="skip-link" href="#main">Skip to the calculator</a>
+
+    <!-- Intro screen: calculator logo, then "Built by Marvo Tech Lab". Tap Skip to go straight in. -->
+    <div class="splash" id="splash" role="status" aria-label="Loading FUSTECH Aggregate Calculator">
+        <div class="splash-inner">
+            <div class="splash-logo">
+                <svg class="splash-ring" viewBox="0 0 140 140" aria-hidden="true">
+                    <circle cx="70" cy="70" r="64" pathLength="100"></circle>
+                </svg>
+                <img src="assets/0dAYTaR01.svg" alt="" width="96" height="96" decoding="async">
+            </div>
+            <p class="splash-title">FUSTECH Aggregate Calculator</p>
+            <p class="splash-credit">
+                <span>Built by Marvo Tech Lab</span>
+                <img src="assets/nVemvJQ01.svg" alt="" width="28" height="28" decoding="async">
+            </p>
+            <div class="splash-bar" aria-hidden="true"><span></span></div>
+        </div>
+        <button type="button" class="splash-skip" id="splash-skip">Skip</button>
+    </div>
+
+    <header class="site-header">
+        <a class="brand" href="./" aria-label="FUSTECH Aggregate Calculator home">
+            <img class="brand-logo" src="assets/file_00000000282081f4893661b5b9f4b9ce.webp" alt="" width="44" height="44" decoding="async">
+            <span class="brand-name">FUSTECH Aggregate Calculator</span>
+        </a>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" title="Toggle theme">
+            <i class="fa-solid fa-moon icon-moon" aria-hidden="true"></i>
+            <i class="fa-solid fa-sun icon-sun" aria-hidden="true"></i>
+        </button>
+    </header>
+
+    <main id="main" class="layout">
+
+        <!-- Intro and formula -->
+        <section class="intro" aria-labelledby="calculator-title">
+            <div class="intro-copy">
+                <h1 id="calculator-title">FUSTECH Aggregate Calculator</h1>
+                <p class="lead">Work out your admission screening score from your JAMB result and five relevant O'Level subjects.</p>
+            </div>
+            <article class="formula" aria-labelledby="formula-title">
+                <h2 id="formula-title">How your aggregate is calculated</h2>
+                <div class="split-bar" aria-hidden="true">
+                    <span class="split-jamb">JAMB 70%</span>
+                    <span class="split-olevel">O'Level 30%</span>
+                </div>
+                <p class="formula-line">JAMB score × 70 ÷ 400, plus the points from your five best relevant subjects (A1 is 6 points, C6 is 1 point).</p>
+            </article>
+        </section>
+
+        <!-- One form, three cards: JAMB, O'Level, Result -->
+        <form id="aggregateCalculator" class="calc-grid" novalidate>
+
+            <!-- Card 1: JAMB -->
+            <section class="panel card card-jamb" aria-labelledby="jamb-title">
+                <div class="card-head">
+                    <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-user-graduate"></i></span>
+                    <div>
+                        <h2 id="jamb-title">JAMB score</h2>
+                        <p>Up to 70 marks</p>
+                    </div>
+                    <span class="card-tag">70%</span>
+                </div>
+                <div class="field">
+                    <label for="jambScore">Enter your JAMB score (0 to 400)</label>
+                    <input type="text" id="jambScore" name="jamb_score" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="e.g. 280" autocomplete="off" required aria-describedby="jambError">
+                    <p class="field-error" id="jambError" role="alert"></p>
+                </div>
+                <p class="live-line">JAMB part: <strong id="jambLive">0.00</strong> <small>/ 70</small></p>
+            </section>
+
+            <!-- Card 2: O'Level -->
+            <section class="panel card card-olevel" aria-labelledby="olevel-title">
+                <div class="card-head">
+                    <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-book-open"></i></span>
+                    <div>
+                        <h2 id="olevel-title">O'Level result</h2>
+                        <p>Up to 30 marks</p>
+                    </div>
+                    <span class="card-tag">30%</span>
+                </div>
+                <fieldset class="olevel">
+                    <legend class="sr-only">Five O'Level subjects and grades</legend>
+                    <div class="subject-row">
+                        <label for="subjectName1">Subject 1</label>
+                        <input type="text" id="subjectName1" name="subject_name_1" placeholder="English" maxlength="30" autocomplete="off" enterkeyhint="next">
+                        <select id="subject1" name="subject_1" aria-label="Subject 1 grade" required>
+                            <option value="">Grade</option>
+                            <option value="6">A1 (6 pts)</option>
+                            <option value="5">B2 (5 pts)</option>
+                            <option value="4">B3 (4 pts)</option>
+                            <option value="3">C4 (3 pts)</option>
+                            <option value="2">C5 (2 pts)</option>
+                            <option value="1">C6 (1 pt)</option>
+                        </select>
+                    </div>
+                    <div class="subject-row">
+                        <label for="subjectName2">Subject 2</label>
+                        <input type="text" id="subjectName2" name="subject_name_2" placeholder="Mathematics" maxlength="30" autocomplete="off" enterkeyhint="next">
+                        <select id="subject2" name="subject_2" aria-label="Subject 2 grade" required>
+                            <option value="">Grade</option>
+                            <option value="6">A1 (6 pts)</option>
+                            <option value="5">B2 (5 pts)</option>
+                            <option value="4">B3 (4 pts)</option>
+                            <option value="3">C4 (3 pts)</option>
+                            <option value="2">C5 (2 pts)</option>
+                            <option value="1">C6 (1 pt)</option>
+                        </select>
+                    </div>
+                    <div class="subject-row">
+                        <label for="subjectName3">Subject 3</label>
+                        <input type="text" id="subjectName3" name="subject_name_3" placeholder="Physics" maxlength="30" autocomplete="off" enterkeyhint="next">
+                        <select id="subject3" name="subject_3" aria-label="Subject 3 grade" required>
+                            <option value="">Grade</option>
+                            <option value="6">A1 (6 pts)</option>
+                            <option value="5">B2 (5 pts)</option>
+                            <option value="4">B3 (4 pts)</option>
+                            <option value="3">C4 (3 pts)</option>
+                            <option value="2">C5 (2 pts)</option>
+                            <option value="1">C6 (1 pt)</option>
+                        </select>
+                    </div>
+                    <div class="subject-row">
+                        <label for="subjectName4">Subject 4</label>
+                        <input type="text" id="subjectName4" name="subject_name_4" placeholder="Chemistry" maxlength="30" autocomplete="off" enterkeyhint="next">
+                        <select id="subject4" name="subject_4" aria-label="Subject 4 grade" required>
+                            <option value="">Grade</option>
+                            <option value="6">A1 (6 pts)</option>
+                            <option value="5">B2 (5 pts)</option>
+                            <option value="4">B3 (4 pts)</option>
+                            <option value="3">C4 (3 pts)</option>
+                            <option value="2">C5 (2 pts)</option>
+                            <option value="1">C6 (1 pt)</option>
+                        </select>
+                    </div>
+                    <div class="subject-row">
+                        <label for="subjectName5">Subject 5</label>
+                        <input type="text" id="subjectName5" name="subject_name_5" placeholder="Biology" maxlength="30" autocomplete="off" enterkeyhint="done">
+                        <select id="subject5" name="subject_5" aria-label="Subject 5 grade" required>
+                            <option value="">Grade</option>
+                            <option value="6">A1 (6 pts)</option>
+                            <option value="5">B2 (5 pts)</option>
+                            <option value="4">B3 (4 pts)</option>
+                            <option value="3">C4 (3 pts)</option>
+                            <option value="2">C5 (2 pts)</option>
+                            <option value="1">C6 (1 pt)</option>
+                        </select>
+                    </div>
+
+                </fieldset>
+                <p class="live-line">O'Level points so far: <strong id="olevelLive">0</strong> <small>/ 30</small></p>
+                <p class="form-status" id="calcStatus" role="alert"></p>
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary" id="calcBtn">
+                        <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                        <span class="btn-label">Calculate aggregate</span>
+                    </button>
+                    <button type="reset" class="btn btn-ghost" id="resetBtn">Clear</button>
+                </div>
+            </section>
+
+            <!-- Card 3: Result slip -->
+            <section class="panel card card-result result" id="result-section" aria-labelledby="result-title" tabindex="-1">
+                <div class="card-head">
+                    <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-award"></i></span>
+                    <div>
+                        <h2 id="result-title">Your aggregate</h2>
+                        <p>Estimated screening score</p>
+                    </div>
+                    <span class="card-tag">/100</span>
+                </div>
+
+                <div class="gauge" id="gauge">
+                    <svg viewBox="0 0 120 120" aria-hidden="true">
+                        <circle class="gauge-track" cx="60" cy="60" r="52"></circle>
+                        <circle class="gauge-fill" id="gaugeFill" cx="60" cy="60" r="52" pathLength="100"></circle>
+                    </svg>
+                    <div class="gauge-text">
+                        <output id="aggregateResult" for="jambScore subject1 subject2 subject3 subject4 subject5">--</output>
+                        <span>out of 100</span>
+                    </div>
+                </div>
+                <p class="sr-only" id="srAnnounce" aria-live="polite"></p>
+                <p class="result-hint" id="resultHint">Fill in the form and tap Calculate to see your score.</p>
+
+                <dl class="breakdown">
+                    <div>
+                        <dt>JAMB contribution</dt>
+                        <dd><span id="jambContribution">-</span> <small>/ 70</small></dd>
+                    </div>
+                    <div>
+                        <dt>O'Level contribution</dt>
+                        <dd><span id="olevelContribution">-</span> <small>/ 30</small></dd>
+                    </div>
+                    <div class="total">
+                        <dt>Total</dt>
+                        <dd><span id="total">-</span> <small>/ 100</small></dd>
+                    </div>
+                </dl>
+
+                <ul class="grade-chips" id="gradeChips" aria-label="Your O'Level grades"></ul>
+
+                <p class="disclaimer">This calculator gives an estimated screening score based on the published criteria. Always confirm cut-off marks with FUSTECH.</p>
+
+                <button type="button" class="btn btn-ghost" id="open-review">
+                    <i class="fa-solid fa-star" aria-hidden="true"></i> Leave a review
+                </button>
+            </section>
+        </form>
+
+        <!-- Reviews -->
+        <section class="panel reviews" id="reviews" aria-labelledby="reviews-title">
+            <h2 id="reviews-title">What students say</h2>
+            <p class="reviews-summary" id="reviews-summary">No reviews yet. Yours can be the first.</p>
+            <ul class="reviews-list" id="reviews-list"></ul>
+
+            <div class="review-form-wrapper" id="review-form-wrapper" hidden>
+                <div class="review-form-header">
+                    <div>
+                        <h3 id="review-form-title"><i class="fa-solid fa-comment" aria-hidden="true"></i> Share your experience</h3>
+                        <p>Your feedback helps us improve this calculator.</p>
+                    </div>
+                    <button type="button" class="icon-btn" id="close-review-form" aria-label="Close review form">
+                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <form class="review-form" id="customer-review-form" novalidate>
+                    <div class="field">
+                        <label for="review-name">Your name</label>
+                        <input type="text" id="review-name" name="name" placeholder="e.g. Daniel" autocomplete="name" maxlength="60" required>
+                    </div>
+                    <div class="field">
+                        <label for="review-email">Email address</label>
+                        <input type="email" id="review-email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" maxlength="120" required>
+                        <small class="hint">Never shown publicly.</small>
+                    </div>
+
+                    <fieldset class="star-rating-field">
+                        <legend>Your rating</legend>
+                        <!-- Radios come first in the markup, highest value first. CSS reverses the row so 1 star sits on the left. -->
+                        <div class="star-rating">
+                            <input type="radio" name="rating" id="star5" value="5" required><label for="star5" title="5 stars"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only">5 stars</span></label>
+                            <input type="radio" name="rating" id="star4" value="4"><label for="star4" title="4 stars"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only">4 stars</span></label>
+                            <input type="radio" name="rating" id="star3" value="3"><label for="star3" title="3 stars"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only">3 stars</span></label>
+                            <input type="radio" name="rating" id="star2" value="2"><label for="star2" title="2 stars"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only">2 stars</span></label>
+                            <input type="radio" name="rating" id="star1" value="1"><label for="star1" title="1 star"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only">1 star</span></label>
+                        </div>
+                    </fieldset>
+
+                    <div class="field">
+                        <label for="review-message">Your experience</label>
+                        <textarea id="review-message" name="review" rows="5" placeholder="Was the calculator clear? Did it match what you expected?" maxlength="1000" required></textarea>
+                        <small class="character-count" id="review-count">0 / 1,000 characters (minimum 20)</small>
+                    </div>
+
+                    <!-- Spam trap: real people never see or fill this -->
+                    <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                    <label class="review-consent">
+                        <input type="checkbox" name="publication_consent" value="yes" required>
+                        <span>I agree that my review may be published on this website.</span>
+                    </label>
+
+                    <p class="form-status" id="review-status" role="alert"></p>
+
+                    <button type="submit" class="btn btn-primary" id="review-submit">
+                        <span class="btn-label">Submit review</span>
+                        <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Success card (shown the moment a review is published) -->
+    <div class="review-confirmation" id="review-confirmation" role="dialog" aria-modal="true" aria-labelledby="review-confirm-title" hidden>
+        <div class="review-confirmation-card">
+            <button type="button" class="review-confirm-x" id="review-confirm-x" aria-label="Close">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+            <div class="success-badge">
+                <span class="success-check">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" pathLength="100"/></svg>
+                </span>
+            </div>
+            <h2 id="review-confirm-title">Review published</h2>
+            <p id="review-confirm-text">Thanks for sharing your experience. Your review is now live on this page.</p>
+            <button type="button" class="btn btn-primary" id="review-confirm-close">
+                See my review <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>© <span id="year">2026</span> FUSTECH Aggregate Calculator. Not affiliated with FUSTECH or JAMB.</p>
+    </footer>
+
+    <!-- Floating buttons: WhatsApp bottom-left, Built by Marvo Tech Lab bottom-right -->
+    <aside class="float float-left" id="left">
+        <a href="https://wa.me/2347077282020" target="_blank" rel="noopener noreferrer" aria-label="Contact Marvo Tech Lab on WhatsApp">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            <span class="float-label">WhatsApp</span>
+        </a>
+    </aside>
+    <aside class="float float-right" id="right">
+        <a href="https://marvotechlab.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Built by Marvo Tech Lab. Visit our website">
+            <img src="assets/logo.webp" alt="" width="36" height="36" loading="lazy" decoding="async">
+            <span class="float-label"><small>Built by</small>Marvo Tech Lab</span>
+        </a>
+    </aside>
+
+    <noscript><p class="noscript">This calculator needs JavaScript. Please turn it on and reload.</p></noscript>
+    <script src="script.js" defer></script>
+</body>
+</html>

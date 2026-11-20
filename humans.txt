@@ -1,0 +1,18 @@
+/* TEAM */
+
+Project: FUSTECH Aggregate Calculator
+Developer: Marvo Tech Lab
+Website: https://fustechaggregatecalculator.vercel.app/
+
+/* TECHNOLOGY */
+
+HTML
+CSS
+JavaScript
+Font Awesome
+Google Fonts
+Vercel
+
+/* PURPOSE */
+
+An educational tool for estimating FUSTECH admission screening scores.
