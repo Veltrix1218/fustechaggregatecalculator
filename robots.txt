@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fustechaggregatecalculator.vercel.app/sitemap.xml
+Sitemap: https://fustechaggregatecalc.vercel.app/sitemap.xml
