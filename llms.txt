@@ -4,7 +4,7 @@
 
 ## Website
 
-https://fustechaggregatecalculator.vercel.app/
+https://fustechaggregatecalc.vercel.app/
 
 ## About
 
